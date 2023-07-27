@@ -15,7 +15,7 @@ impl<'board> Iterator for LeftDiagonalIterator<'board> {
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.i < self.board.len() {
-          let val = &self.board[(self.i,self.i)];
+          let val = &self.board.rows[self.i][self.i];
           self.i += 1;
           Option::Some(val)
         }
@@ -41,7 +41,7 @@ impl<'board> Iterator for RightDiagonalIterator<'board> {
     fn next(&mut self) -> Option<Self::Item> {
       let len = self.board.len();
       if self.i < len {
-        let val = &self.board[(self.i, len - 1 - self.i)];
+        let val = &self.board.rows[self.i][len - 1 - self.i];
         self.i += 1;
         Option::Some(val)
       }

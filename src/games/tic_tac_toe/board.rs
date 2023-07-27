@@ -2,7 +2,7 @@ mod rows_iterator;
 mod columns_iterator;
 mod diagonals_iterator;
 
-use super::color::{Color, self};
+use super::color::*;
 use rows_iterator::*;
 use columns_iterator::*;
 use diagonals_iterator::*;
@@ -12,22 +12,6 @@ pub type Cell = Option<Color>;
 #[derive(Debug)]
 pub struct Board {
   rows: Vec<Vec<Cell>>
-}
-
-impl std::ops::Index<(usize,usize)> for Board {
-  type Output = Cell;
-
-  fn index(&self, index:(usize,usize)) -> &Self::Output{
-    let (row,col) = index;
-    &self.rows[row][col]
-  }
-}
-
-impl std::ops::IndexMut<(usize,usize)> for Board {
-  fn index_mut(&mut self, index:(usize,usize)) -> &mut Self::Output{
-    let (row,col) = index;
-    &mut self.rows[row][col]
-  }
 }
 
 impl Board {
@@ -69,7 +53,7 @@ impl Board {
     *fst
   }
 
-  fn winner(&self) -> Cell {
+  pub fn winner(&self) -> Cell {
     for mut row in self.rows() {
       if let win@Option::Some(_) = Board::line_winner(&mut row) {
         return win

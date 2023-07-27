@@ -23,7 +23,7 @@ impl<'board> Iterator for ColumnIterator<'board> {
       if self.row < self.board.len() {
         let r = self.row;
         self.row += 1;
-        Option::Some(&self.board[(r, self.col)])
+        Option::Some(&self.board.rows[r][self.col])
       }
       else {
         Option::None
