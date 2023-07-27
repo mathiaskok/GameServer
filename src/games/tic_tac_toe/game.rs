@@ -1,2 +1,10 @@
-pub mod game {
+use super::board::*;
+
+#[derive(Debug)]
+pub struct Game {
+  board: Board
+}
+
+impl Game {
+
 }

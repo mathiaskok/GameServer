@@ -2,16 +2,30 @@ mod rows_iterator;
 mod columns_iterator;
 mod diagonals_iterator;
 
-use super::color::*;
-use rows_iterator::*;
-use columns_iterator::*;
-use diagonals_iterator::*;
+pub use super::color::*;
+pub use rows_iterator::*;
+pub use columns_iterator::*;
+pub use diagonals_iterator::*;
 
 pub type Cell = Option<Color>;
 
 #[derive(Debug)]
 pub struct Board {
   rows: Vec<Vec<Cell>>
+}
+
+impl std::ops::Index<(usize,usize)> for Board {
+  type Output = Cell;
+
+  fn index(&self, index: (usize,usize)) -> &Self::Output {
+    &self.rows[index.0][index.1]
+  }
+}
+
+impl std::ops::IndexMut<(usize,usize)> for Board {
+  fn index_mut(&mut self, index: (usize,usize)) -> &mut Self::Output {
+    &mut self.rows[index.0][index.1]
+  }
 }
 
 impl Board {
