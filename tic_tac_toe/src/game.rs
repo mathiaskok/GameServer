@@ -4,7 +4,3 @@ use super::board::*;
 pub struct Game {
   board: Board
 }
-
-impl Game {
-
-}
