@@ -43,10 +43,15 @@ impl<'player> Game<'player> {
   }
 }
 
-impl<'state, 'ply, 'player> game_definition::Game<'state, 'ply, 'player> for Game<'player> {
+impl<'state, 'ply, 'player, 'config> game_definition::Game<'state, 'ply, 'player, 'config> for Game<'player> {
   type State = State;
   type Ply = (usize,usize);
   type Player = Player<'player>;
+  type Config = usize;
+
+  fn initialize(&self, config: &Self::Config) -> Self::State {
+    State::new(*config)
+  }
 
   fn game_state(&self, state: Self::State) -> game_definition::GameState<Self::Player> {
     match state.winner() {

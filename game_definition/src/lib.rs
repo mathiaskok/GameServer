@@ -13,10 +13,13 @@ pub enum PlyError {
   GameOver
 }
 
-pub trait Game<'state, 'ply, 'player> {
+pub trait Game<'state, 'ply, 'player, 'config> {
   type State;
   type Ply;
   type Player;
+  type Config;
+
+  fn initialize(&self, config: &Self::Config) -> Self::State;
 
   fn game_state(&self, state: Self::State) -> GameState<Self::Player>;
 

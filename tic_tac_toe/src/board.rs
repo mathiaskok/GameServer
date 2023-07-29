@@ -19,13 +19,13 @@ impl std::ops::Index<Idx> for Board {
   type Output = Cell;
 
   fn index(&self, index: Idx) -> &Self::Output {
-    &self.rows[index.0][index.1]
+    self.get(index).unwrap()
   }
 }
 
 impl std::ops::IndexMut<Idx> for Board {
   fn index_mut(&mut self, index: Idx) -> &mut Self::Output {
-    &mut self.rows[index.0][index.1]
+    self.get_mut(index).unwrap()
   }
 }
 
@@ -34,6 +34,14 @@ impl Board {
     Board {
       rows: vec![vec![Option::None; len]; len]
     }
+  }
+
+  pub fn get(&self, index: Idx) -> Option<&Cell> {
+    self.rows.get(index.0).and_then(|r| r.get(index.1))
+  }
+
+  pub fn get_mut(&mut self, index: Idx) -> Option<&mut Cell> {
+    self.rows.get_mut(index.0).and_then(|r| r.get_mut(index.1))
   }
 
   pub fn len(&self) -> usize {
@@ -90,15 +98,5 @@ impl Board {
     }
 
     Option::None
-  }
-
-  pub fn get_mut(&mut self, index: Idx) -> Option<&mut Cell> {
-    let len = self.len();
-    if index.0 >= len || index.1 >= len {
-      Option::None
-    }
-    else {
-      Option::Some(&mut self[index])
-    }
   }
 }
