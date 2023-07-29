@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
+name = "game_definition"
+version = "0.1.0"
+
+[[package]]
 name = "tic_tac_toe"
 version = "0.1.0"
+dependencies = [
+ "game_definition",
+]

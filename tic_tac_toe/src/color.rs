@@ -9,3 +9,14 @@ impl ToString for Color {
     }
   }
 }
+
+impl std::ops::Not for Color {
+  type Output = Self;
+
+  fn not(self) -> Self::Output {
+    match self {
+      Color::Nought => Color::Cross,
+      Color::Cross => Color::Nought
+    }
+  }
+}

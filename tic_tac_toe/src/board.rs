@@ -8,30 +8,31 @@ pub use columns_iterator::*;
 pub use diagonals_iterator::*;
 
 pub type Cell = Option<Color>;
+pub type Idx = (usize,usize);
 
 #[derive(Debug)]
 pub struct Board {
   rows: Vec<Vec<Cell>>
 }
 
-impl std::ops::Index<(usize,usize)> for Board {
+impl std::ops::Index<Idx> for Board {
   type Output = Cell;
 
-  fn index(&self, index: (usize,usize)) -> &Self::Output {
+  fn index(&self, index: Idx) -> &Self::Output {
     &self.rows[index.0][index.1]
   }
 }
 
-impl std::ops::IndexMut<(usize,usize)> for Board {
-  fn index_mut(&mut self, index: (usize,usize)) -> &mut Self::Output {
+impl std::ops::IndexMut<Idx> for Board {
+  fn index_mut(&mut self, index: Idx) -> &mut Self::Output {
     &mut self.rows[index.0][index.1]
   }
 }
 
 impl Board {
-  pub fn empty(length:usize) -> Self {
+  pub fn new(len: usize) -> Self {
     Board {
-      rows: vec![vec![Option::None; length]; length]
+      rows: vec![vec![Option::None; len]; len]
     }
   }
 
@@ -89,5 +90,15 @@ impl Board {
     }
 
     Option::None
+  }
+
+  pub fn get_mut(&mut self, index: Idx) -> Option<&mut Cell> {
+    let len = self.len();
+    if index.0 >= len || index.1 >= len {
+      Option::None
+    }
+    else {
+      Option::Some(&mut self[index])
+    }
   }
 }
