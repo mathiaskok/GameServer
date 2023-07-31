@@ -71,8 +71,14 @@ fn main() {
   let mut state = game.initialize(&len);
   loop {
     match game.game_state(&state) {
-      GameState::Draw => console.write_all("The game was a draw."),
-      GameState::Winner(winner) => console.write_all(&format!("The winner was '{}'", winner)),
+      GameState::Draw => {
+        console.write_all("The game was a draw.");
+        break;
+      },
+      GameState::Winner(winner) => {
+        console.write_all(&format!("The winner was '{}'", winner));
+        break;
+      },
       GameState::Ongoing(player) => {
         console.write_all(&state.to_string());
         let ply_result = game.ply(state, get_ply(&mut console), player);

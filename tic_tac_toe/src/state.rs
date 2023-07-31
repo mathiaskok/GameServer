@@ -16,7 +16,7 @@ pub struct State {
 impl ToString for State {
   fn to_string(&self) -> String {
     self.current().to_string() +
-      "-----\n" + 
+      "\n-----\n" + 
       &self.board.to_string()
   }
 }
