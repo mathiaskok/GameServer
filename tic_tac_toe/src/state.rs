@@ -1,3 +1,5 @@
+use game_definition::ResultWithInput;
+
 use super::board::Board;
 pub use super::board::Color;
 pub use super::board::Idx;
@@ -9,6 +11,14 @@ pub enum Error { InvalidColor, IllegalPly, GameOver }
 pub struct State {
   board: Board,
   current: Color
+}
+
+impl ToString for State {
+  fn to_string(&self) -> String {
+    self.current().to_string() +
+      "-----\n" + 
+      &self.board.to_string()
+  }
 }
 
 impl State {
@@ -27,21 +37,25 @@ impl State {
     self.board.winner()
   }
 
-  pub fn ply(mut self, pos: Idx, color: Color) -> Result<Self, Error> {
+  pub fn complete(&self) -> bool {
+    !self.board.free_cells()
+  }
+
+  pub fn ply(mut self, pos: Idx, color: Color) -> ResultWithInput<Self, Error> {
     if self.current != color {
-      return Result::Err(Error::InvalidColor)
+      return ResultWithInput::from(self).with(Error::InvalidColor)
     }
     
     match self.board.winner() {
-      Option::Some(_) => Result::Err(Error::GameOver),
+      Option::Some(_) => ResultWithInput::from(self).with(Error::GameOver),
       Option::None => {
         match self.board.get_mut(pos) {
-          Option::None => Result::Err(Error::IllegalPly),
-          Option::Some(Option::Some(_)) => Result::Err(Error::IllegalPly),
+          Option::None => ResultWithInput::from(self).with(Error::IllegalPly),
+          Option::Some(Option::Some(_)) => ResultWithInput::from(self).with(Error::IllegalPly),
           Option::Some(cell) => {
             *cell = Option::Some(color);
             self.current = !color;
-            Result::Ok(self)
+            ResultWithInput::from(self)
           }
         }
       }

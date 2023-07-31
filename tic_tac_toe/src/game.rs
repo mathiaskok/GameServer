@@ -1,4 +1,4 @@
-use game_definition::{GameState, PlyError};
+use game_definition::{GameState, PlyError, ResultWithInput};
 
 use super::state::*;
 
@@ -53,17 +53,18 @@ impl<'state, 'ply, 'player, 'config> game_definition::Game<'state, 'ply, 'player
     State::new(*config)
   }
 
-  fn game_state(&self, state: Self::State) -> game_definition::GameState<Self::Player> {
+  fn game_state(&self, state: &Self::State) -> game_definition::GameState<Self::Player> {
     match state.winner() {
+      Option::None if state.complete() => GameState::Draw,
       Option::None => GameState::Ongoing(self.color_to_player(state.current())),
       Option::Some(Color::Nought) => GameState::Winner(self.nought),
       Option::Some(Color::Cross) => GameState::Winner(self.cross),
     }
   }
 
-  fn ply(&self, state: Self::State, ply: Self::Ply, player: Self::Player) -> Result<Self::State, game_definition::PlyError> {
+  fn ply(&self, state: Self::State, ply: Self::Ply, player: Self::Player) -> ResultWithInput<Self::State, game_definition::PlyError> {
     match self.player_to_color(player) {
-      Option::None => Result::Err(PlyError::UnknownUser),
+      Option::None => ResultWithInput::from(state).with(PlyError::UnknownUser),
       Option::Some(color) => state.ply(ply, color).map_err(transform_state_error)
     }
   }

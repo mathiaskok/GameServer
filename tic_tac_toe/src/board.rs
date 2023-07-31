@@ -29,6 +29,25 @@ impl std::ops::IndexMut<Idx> for Board {
   }
 }
 
+fn cell_to_string(cell: Cell) -> String {
+  match cell {
+    Option::None => String::from("_"),
+    Option::Some(color) => color.to_string()
+  }
+}
+
+impl ToString for Board {
+  fn to_string(&self) -> String {
+      self.rows()
+        .map(|row| row
+          .map(|cell| cell_to_string(*cell))
+          .fold(String::new(), |s1,s2| s1 + &s2))
+        .fold(String::new(), |s1,s2| s1 + "\n" + &s2)
+        .trim()
+        .to_string()
+  }
+}
+
 impl Board {
   pub fn new(len: usize) -> Self {
     Board {
@@ -98,5 +117,9 @@ impl Board {
     }
 
     Option::None
+  }
+
+  pub fn free_cells(&self) -> bool {
+    self.rows().flatten().any(|c| *c == Option::None)
   }
 }
