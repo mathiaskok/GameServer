@@ -1,6 +1,7 @@
 [workspace]
-
 members = [
+  "game_interface",
   "tic_tac_toe",
-  "game_definition"
+  "storage_interface",
+  "sqlite_storage"
 ]

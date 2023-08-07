@@ -1,4 +1,4 @@
-use game_definition::{GameState, PlyError, ResultWithInput};
+use game_interface::{GameState, PlyError, ResultWithInput};
 
 use super::state::*;
 
@@ -43,7 +43,7 @@ impl<'player> Game<'player> {
   }
 }
 
-impl<'state, 'ply, 'player, 'config> game_definition::Game<'state, 'ply, 'player, 'config> for Game<'player> {
+impl<'state, 'ply, 'player, 'config> game_interface::GameDefinition<'state, 'ply, 'player, 'config> for Game<'player> {
   type State = State;
   type Ply = (usize,usize);
   type Player = Player<'player>;
@@ -53,7 +53,7 @@ impl<'state, 'ply, 'player, 'config> game_definition::Game<'state, 'ply, 'player
     State::new(*config)
   }
 
-  fn game_state(&self, state: &Self::State) -> game_definition::GameState<Self::Player> {
+  fn game_state(&self, state: &Self::State) -> game_interface::GameState<Self::Player> {
     match state.winner() {
       Option::None if state.complete() => GameState::Draw,
       Option::None => GameState::Ongoing(self.color_to_player(state.current())),
@@ -62,7 +62,7 @@ impl<'state, 'ply, 'player, 'config> game_definition::Game<'state, 'ply, 'player
     }
   }
 
-  fn ply(&self, state: Self::State, ply: Self::Ply, player: Self::Player) -> ResultWithInput<Self::State, game_definition::PlyError> {
+  fn ply(&self, state: Self::State, ply: Self::Ply, player: Self::Player) -> ResultWithInput<Self::State, PlyError> {
     match self.player_to_color(player) {
       Option::None => ResultWithInput::from(state).with(PlyError::UnknownUser),
       Option::Some(color) => state.ply(ply, color).map_err(transform_state_error)

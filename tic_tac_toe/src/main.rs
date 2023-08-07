@@ -1,6 +1,6 @@
 use std::io::{Write};
 
-use game_definition::*;
+use game_interface::*;
 use tic_tac_toe::game as tic_tac_toe;
 
 struct Console {

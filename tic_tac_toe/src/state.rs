@@ -1,4 +1,4 @@
-use game_definition::ResultWithInput;
+use game_interface::ResultWithInput;
 
 use super::board::Board;
 pub use super::board::Color;
